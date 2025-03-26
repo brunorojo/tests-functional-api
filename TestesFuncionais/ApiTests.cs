@@ -1,9 +1,17 @@
 using RestSharp;
 using TestesFuncionais;
+using TestesFuncionais.Configurations;
 
 public class ApiTests : BaseApiSteps
 {
-    public ApiTests(ITestOutputHelper output) : base(output) { }
+    private readonly ConfigurationService _configService;
+    private readonly ApiConfigurations _apiConfig;
+
+    public ApiTests(ITestOutputHelper output) : base(output)
+    {
+        _configService = new ConfigurationService();
+        _apiConfig = _configService.GetApiConfiguration();
+    }
 
     [Fact]
     public async Task CriarItemComSucesso()

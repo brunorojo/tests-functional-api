@@ -1,0 +1,13 @@
+{
+  "BaseUrl": "https://homolog.api.exemplo.com",
+  "Headers": {
+    "Authorization": "Bearer homolog-token",
+    "CustomHeader": "homolog-value"
+  },
+  "Routes": {
+    "CreateItem": "/posts",
+    "GetAllItems": "/posts",
+    "UpdateItem": "/posts/{id}",
+    "DeleteItem": "/posts/{id}"
+  }
+}

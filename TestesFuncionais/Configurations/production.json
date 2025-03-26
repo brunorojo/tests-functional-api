@@ -1,0 +1,13 @@
+{
+  "BaseUrl": "https://api.exemplo.com",
+  "Headers": {
+    "Authorization": "Bearer prod-token",
+    "CustomHeader": "prod-value"
+  },
+  "Routes": {
+    "CreateItem": "/posts",
+    "GetAllItems": "/posts",
+    "UpdateItem": "/posts/{id}",
+    "DeleteItem": "/posts/{id}"
+  }
+}
