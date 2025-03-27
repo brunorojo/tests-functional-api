@@ -1,8 +1,8 @@
 {
-  "BaseUrl": "https://homolog.api.exemplo.com",
+  "BaseUrl": "https://jsonplaceholder.typicode.com",
   "Headers": {
-    "Authorization": "Bearer homolog-token",
-    "CustomHeader": "homolog-value"
+    "Authorization": "Bearer dev-token",
+    "CustomHeader": "dev-value"
   },
   "Routes": {
     "CreateItem": "/posts",

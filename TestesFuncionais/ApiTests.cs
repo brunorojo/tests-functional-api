@@ -1,16 +1,23 @@
 using RestSharp;
-using TestesFuncionais;
 using TestesFuncionais.Configurations;
+using TestesFuncionais.Core;
+
+namespace TestesFuncionais;
 
 public class ApiTests : BaseApiSteps
 {
     private readonly ConfigurationService _configService;
     private readonly ApiConfigurations _apiConfig;
 
-    public ApiTests(ITestOutputHelper output) : base(output)
+    public ApiTests(ITestOutputHelper outputHelper) : base(outputHelper, new ConfigurationService())
     {
         _configService = new ConfigurationService();
         _apiConfig = _configService.GetApiConfiguration();
+    }
+
+    private RestClient CreateClient()
+    {
+        return new RestClient(_apiConfig.BaseUrl); // Usa a BaseUrl configurada
     }
 
     [Fact]
@@ -21,9 +28,9 @@ public class ApiTests : BaseApiSteps
 
         var response = await ExecuteWithRetryAsync(request);
 
-        _output.WriteLine("## RESPONSE:");
-        _output.WriteLine($"Status Code: {response.StatusCode}");
-        _output.WriteLine($"Content: {response.Content ?? "Resposta vazia"}");
+        OutputHelper.WriteLine("## RESPONSE:");
+        OutputHelper.WriteLine($"Status Code: {response.StatusCode}");
+        OutputHelper.WriteLine($"Content: {response.Content ?? "Resposta vazia"}");
 
         Assert.True(response.IsSuccessful, $"Erro na requisição: {response.StatusCode} - {response.ErrorMessage}");
         Assert.False(string.IsNullOrWhiteSpace(response.Content), "Resposta vazia ou inválida.");
@@ -37,12 +44,12 @@ public class ApiTests : BaseApiSteps
 
         var response = await ExecuteWithRetryAsync(request);
 
-        _output.WriteLine("## RESPONSE:");
-        _output.WriteLine($"Status Code: {response.StatusCode}");
-        _output.WriteLine($"Content: {response.Content ?? "Response vazio"}");
+        OutputHelper.WriteLine("## RESPONSE:");
+        OutputHelper.WriteLine($"Status Code: {response.StatusCode}");
+        OutputHelper.WriteLine($"Content: {response.Content ?? "Response vazio"}");
 
         Assert.True(response.IsSuccessful, $"Erro na requisição: {response.StatusCode} - {response.ErrorMessage}");
-        Assert.False(string.IsNullOrWhiteSpace(response.Content), "Response invalido.");
+        Assert.False(string.IsNullOrWhiteSpace(response.Content), "Response inválido.");
     }
 
     [Fact]
@@ -52,9 +59,9 @@ public class ApiTests : BaseApiSteps
 
         var response = await ExecuteWithRetryAsync(request);
 
-        _output.WriteLine("## RESPONSE:");
-        _output.WriteLine($"Status Code: {response.StatusCode}");
-        _output.WriteLine($"Content: {response.Content ?? "Resposta vazia"}");
+        OutputHelper.WriteLine("## RESPONSE:");
+        OutputHelper.WriteLine($"Status Code: {response.StatusCode}");
+        OutputHelper.WriteLine($"Content: {response.Content ?? "Resposta vazia"}");
 
         Assert.True(response.IsSuccessful, $"Erro na requisição: {response.StatusCode} - {response.ErrorMessage}");
         Assert.False(string.IsNullOrWhiteSpace(response.Content), "Response inválido.");

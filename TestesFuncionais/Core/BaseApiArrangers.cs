@@ -1,6 +1,6 @@
 using RestSharp;
 
-namespace TestesFuncionais;
+namespace TestesFuncionais.Core;
 
 public static class BaseApiArrangers
 {

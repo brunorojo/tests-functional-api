@@ -1,18 +1,21 @@
 using RestSharp;
-using Xunit;
+using TestesFuncionais.Configurations;
 
-namespace TestesFuncionais;
+namespace TestesFuncionais.Core;
 
 public abstract class BaseApiSteps : XunitContextBase
 {
-    protected readonly ITestOutputHelper _output;
-    protected readonly RestClient _client;
+    protected readonly ITestOutputHelper OutputHelper;
+    protected readonly RestClient Client;
 
-    protected BaseApiSteps(ITestOutputHelper output) : base(output)
+    protected BaseApiSteps(ITestOutputHelper outputHelper, ConfigurationService configService) : base(outputHelper)
     {
-        _output = output;
-        _client = new RestClient("https://jsonplaceholder.typicode.com");
-        _output.WriteLine($"### {Context.Test.DisplayName} ###");
+        OutputHelper = outputHelper;
+
+        var apiConfig = configService.GetApiConfiguration();
+        Client = new RestClient(apiConfig.BaseUrl); // Agora usa a URL configurável
+
+        OutputHelper.WriteLine($"### {Context.Test.DisplayName} ###");
     }
 
     protected async Task<RestResponse> ExecuteWithRetryAsync(RestRequest request, int maxRetries = 3)
@@ -23,16 +26,16 @@ public abstract class BaseApiSteps : XunitContextBase
         while (attempt < maxRetries)
         {
             attempt++;
-            _output.WriteLine($"Tentativa {attempt} de {maxRetries}");
+            OutputHelper.WriteLine($"Tentativa {attempt} de {maxRetries}");
 
-            response = await _client.ExecuteAsync(request);
+            response = await Client.ExecuteAsync(request);
 
             if (response.IsSuccessful)
             {
                 return response;
             }
 
-            _output.WriteLine($"Falha na tentativa {attempt}: {response.StatusCode} - {response.ErrorMessage}");
+            OutputHelper.WriteLine($"Falha na tentativa {attempt}: {response.StatusCode} - {response.ErrorMessage}");
             await Task.Delay(2000);
         }
 

@@ -1,5 +1,5 @@
 {
-  "BaseUrl": "https://api.exemplo.com",
+  "BaseUrl": "https://jsonplaceholder.typicode.com",
   "Headers": {
     "Authorization": "Bearer prod-token",
     "CustomHeader": "prod-value"

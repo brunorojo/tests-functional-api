@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using System.IO;
 
 namespace TestesFuncionais.Configurations
 {
@@ -30,9 +29,10 @@ namespace TestesFuncionais.Configurations
 
         public ConfigurationService()
         {
+            // Configuração do arquivo principal
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "Configurations"))
-                .AddJsonFile("config.json", optional: false, reloadOnChange: true);
+                .AddJsonFile("Config.json", optional: false, reloadOnChange: true);
 
             _configuration = builder.Build();
         }
@@ -41,14 +41,17 @@ namespace TestesFuncionais.Configurations
         {
             var environment = _configuration.GetValue<string>("Environment");
 
-            var environmentConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "Configurations", $"{environment}.json");
+            // Carrega o arquivo de configuração correspondente ao ambiente
+            var environmentConfigPath =
+                Path.Combine(Directory.GetCurrentDirectory(), "Configurations", $"{environment}.json");
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(environmentConfigPath, optional: false, reloadOnChange: true);
 
             var config = builder.Build();
-            
+
+            // Acessa e mapeia manualmente a seção "ApiConfigurations"
             var apiConfigSection = config.GetSection("ApiConfigurations");
             var apiConfigurations = new ApiConfigurations
             {
